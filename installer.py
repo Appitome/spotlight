@@ -6,12 +6,12 @@ import subprocess
 
 
 def suto(package):
-    print("")
-    print("SUDO: " + package)
-    subprocess.check_call(["sudo", "apt-get", package])
+     print("")
+     print("SUDO: " + package)
+     subprocess.check_call(["sudo", "apt-get", package])
 
-suto("update")
-suto("upgrade")
+# suto("update")
+# suto("upgrade")
 
 def sutoinst(package):
     print("")
@@ -48,8 +48,6 @@ if os.path.exists('rgbmatrix') == False:
     dst_path = os.path.join(os.getcwd(), os.path.basename(src_path))
 
     shutil.copytree(src_path, dst_path)
-else: 
-    print('rgbmatrix found')
 
 #Remove extra matrix files
 if os.path.exists('rgb-matrix.sh'):

@@ -108,7 +108,9 @@ A couple of modules are required to be installed before the main program can be 
 ```
 python setup.py
 ```
- - During the setup process some questions may be asked. If asked to reboot, select the 'no' option. The program will manually reboot once finished.
+ - During the setup process some questions may be asked.
+ - ***y*** continue, ***1*** RGB Matrix Bonnet, ***1*** Quality, ***y*** continue
+ - If asked to reboot, select the '***no***' option. The program will manually reboot once finished.
 Once the terminal prompts that the Pi is rebooting, allow a couple minutes for the device to boot.
 
 To check that the Pi has successfullly rebooted, ping to confirm, reconnect using SSH, and reaccess the working directory

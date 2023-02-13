@@ -1,72 +1,65 @@
-import followspot as fs
-import display as dp
+import os
 import time
+import subprocess
+import configparser
+import urllib.request
+import multiprocessing
 
-current_user = "ROB"
+#Change working directory to folder
+os.chdir('/home/pi/spotify/')
 
-#fs.initialize_token(client_id = '0f0d52e0e2c24a988dcbcc55a9d249ab', client_secret = 'c1c98444cdea4ea2a38675f58f1d1a10', redirect_uri = 'http://localhost:8888/callback/', username= 'r')
+def connected(): #Check if connected to the internet
+    try:
+        urllib.request.urlopen('http://google.com')
+        return True
+    except:
+        return False
 
-#generate new access token
-#access_token = fs.refresh_access_token(current_user)
-#print("Access Token:", access_token)
+#Clear terminal
+os.system('cls||clear')
+print("connecting...",end="")
+#Wait for connection
+while not connected():
+    print(".",end="")
+    time.sleep(2)
+print("")    
+time.sleep(0.5)
 
-fs.access_expired(current_user, auto_refresh = True)
+#Define function that will be run in a separate subprocess
+def subprocess_0():
+    while True:
+        subprocess.run(["python", "song.py"])
 
-fs.get_users()
+def subprocess_1(): #Set the display program to run
+    while True:    
+        config = configparser.ConfigParser()
 
-#request currently playing data from servers
-data = fs.refresh_current_data(current_user)
-#print(data)
+        for file in os.listdir():
+            if file.endswith(".ini"):
+                config_path = os.path.abspath(file)
+        
+        config.read(config_path)
 
-print("Is Playing:", fs.is_playing(data))
+        display_type = config['DISPLAY']['display_type']
 
-while True:
-  
-  fs.access_expired(current_user, auto_refresh = True)
-  
-  data = fs.refresh_current_data(current_user)
-  
-  if fs.is_playing(data):
+        if display_type == 'matrix':
+            subprocess.run(["sudo", "python", "matrix.py"])
+        elif display_type == 'address':
+            subprocess.run(["sudo", "python", "neo.py"])
+        else:
+            print("Headless Mode")
 
-    play_type = fs.play_type(data)
-    
-    if play_type == 'track':
-      if fs.new_song(data):
-        print("")
-        print(fs.song_name(data))
-        fs.download_ablum_cover(data, "CurrentlyPlaying.jpg")
-        dp.gridify(64,64,"CurrentlyPlaying.jpg",scramble=True)
-      
-      #fs.play_progress(data)
+def subprocess_2(): #Program to monitor external events
+    while True:
+        subprocess.run(["python", "monitor.py"])
+        
+ 
+# Create Process objects
+p0 = multiprocessing.Process(target=subprocess_0)
+p1 = multiprocessing.Process(target=subprocess_1)
+p2 = multiprocessing.Process(target=subprocess_2)
 
-    elif play_type == 'episode':
-      print('episode')
-      time.sleep(10)
-    
-    elif play_type == 'ad':
-      print('ad')
-      time.sleep(10)
-
-  else:
-    print("Extended Sleep")
-    time.sleep(10)
-    
-  time.sleep(0.5)
-
-
-#see what type of audio is playing (ie. "track")
-play_type = fs.play_type(data)
-print("We are currently listening to", play_type)
-
-#get song name if available
-song = fs.song_name(data)
-if song is not False:
-  print(song)
-else:
-  print("Song is not currently playing")
-
-if song == "track":
-
-  fs.download_ablum_cover(data, "CurrentlyPlaying.jpg")
-
-  fs.gridify(32,32,"CurrentlyPlaying.jpg")
+# Start the subprocesses
+p0.start()
+p1.start()
+p2.start()

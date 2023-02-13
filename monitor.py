@@ -1,3 +1,4 @@
+import RPi.GPIO as GPIO
 import os
 import ast
 import time
@@ -7,7 +8,17 @@ import followspot as fs
 
 config = configparser.ConfigParser()
 
-def switch_user():
+#Set the GPIO mode
+GPIO.setmode(GPIO.BCM)
+
+#Define the GPIO pin input
+GPIO_SW = 25
+
+#Set the GPIO pin as an input
+GPIO.setup(GPIO_SW, GPIO.IN)
+
+#Callback function
+def switch_user(channel):
     
     for file in os.listdir():
         if file.endswith(".ini"):
@@ -46,10 +57,13 @@ def switch_user():
 
     fs.download_profile_picture(users[index], "CurrentUser.jpg", request_timeout = 60)
     dp.crop_gridify("CurrentUser.jpg", grid_x, grid_y, scramble = True)
-    
-# Main loop
-while True:
 
-    switch_user()
-    # Sleep for a short time
-    time.sleep(10)
+# Add the event detection for a falling edge on the GPIO_CLK pin
+GPIO.add_event_detect(GPIO_SW, GPIO.RISING, callback=switch_user, bouncetime=500)
+    #GPIO.FALLING
+    #GPIO.RISING
+    #GPIO.BOTH
+
+# Continuously monitor for events
+while True:
+    time.sleep(1)

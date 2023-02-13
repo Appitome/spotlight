@@ -52,10 +52,12 @@ def initilize():
     username = input("Please Enter Your Username: ")
     users['owner'] = username
     users['Current_user'] = username
-    users['users'] = username
+    #users['users'] = username
     
     fs.initialize_token(username = username)
     
+    config['USERS']['users'] = str(fs.get_users())
+
     print("Great! Your Account Is Now Set Up!")
     time.sleep(0.5)
     print("Next Let's Set Up The Display")

@@ -210,13 +210,15 @@ Within the ```rc.local``` file, routines can be created to automatically run on 
 
 On a line prier to ```exit 0```, enter the following:
 ```
-python /home/pi/spotlight/main.py &
+python '/home/pi/spotlight/main.py' &
 ```
  - ```python```: The script that will be run depends on python
  - ```/home/pi/spotlight/main.py```: The location of the file to run
  - ```&```: Tells the file not to wait for the program to finish and continue with the boot process
 
-Once the file is edited: ```ctrl+x``` + ```y``` + ```enter``` to save the changes.
+![RcLocal](https://user-images.githubusercontent.com/17167742/218591525-bfe7d51c-fa76-4102-a9d5-7040d9eed51f.jpg)
+
+Once the file is properly edited: ```ctrl+x``` + ```y``` + ```enter``` to save the changes.
 
 Finally reboot the raspberry pi:
 ```

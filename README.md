@@ -91,3 +91,38 @@ Select "yes" and enter the previously set password for the device.
 If a known host safty error occurs follow the terminal instructions to clear the ```known_hosts``` file on the computer being used
 
 ## Cloning the Git Repository
+
+Clone the spotlight repository using the following command:
+```
+git clone https://github.com/Appitome/spotlight.git
+```
+Once cloned we can access the spotlight folder:
+```
+cd /home/pi/spotlight
+```
+Inside this folder, all files can be viewed using the command:
+```
+ls
+```
+A couple of modules are required to be installed before the main program can be run. Enter the following command:
+```
+python setup.py
+```
+ - During the setup process some questions may be asked. If asked to reboot, select the 'no' option. The program will manually reboot once finished.
+Once the terminal prompts that the Pi is rebooting, allow a couple minutes for the device to boot.
+
+To check that the Pi has successfullly rebooted, ping to confirm, reconnect using SSH, and reaccess the working directory
+```
+ping raspberrypi.local
+```
+```
+SSH pi@raspberrypi.local
+```
+```
+cd /home/pi/spotlight
+```
+## Configure Display Settings
+To setup the display run the configuration program:
+```
+python config.py
+```

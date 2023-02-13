@@ -195,5 +195,31 @@ Then run the following command to temporarily test the program:
 python main.py
 ```
 
-If everything is running smothly, the title of the currently playing song will be displayed.
+If everything is running smothly, the title of the currently playing song will be displayed in the terminal.
+The alblum cover image will appear on the device.
+To exit the program: ```ctrl+z```
 
+## Automatically Running Program On Boot
+The purpose of the display is to automatically display current alblum covers without any user intervention. Therefore, having to manually start the program every time the can be considered counterproductive.
+
+To auto start the ```main.py``` program on device boot, enter the following command into the terminal:
+```
+sudo nano /etc/rc.local
+```
+Within the ```rc.local``` file, routines can be created to automatically run on boot.
+
+On a line prier to ```exit 0```, enter the following:
+```
+python /home/pi/spotlight/main.py &
+```
+ - ```python```: The script that will be run depends on python
+ - ```/home/pi/spotlight/main.py```: The location of the file to run
+ - ```&```: Tells the file not to wait for the program to finish and continue with the boot process
+
+Once the file is edited: ```ctrl+x``` + ```y``` + ```enter``` to save the changes.
+
+Finally reboot the raspberry pi:
+```
+sudo reboot
+```
+If all goes well, the display will show the currently playing song's alblum cover after startup.

@@ -6,7 +6,7 @@ import urllib.request
 import multiprocessing
 
 #Change working directory to folder
-os.chdir('/home/pi/spotify/')
+os.chdir('/home/pi/spotlight/')
 
 def connected(): #Check if connected to the internet
     try:

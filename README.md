@@ -102,7 +102,7 @@ ping raspberrypi.local
 ```
 If connected, the ping will return an address. Sometimes the Pi might take longer to boot so if no responce is initally found wait a couple minutes and try again.
 
-![Ping](https://user-images.githubusercontent.com/17167742/218396173-ffc92c60-b681-44a4-8d20-7187a600c947.png)
+![Ping](https://user-images.githubusercontent.com/17167742/218591878-8d0317d2-9fa8-435d-b0b5-e8811051c69f.jpg)
 
 If the ping continously fails to connect, first make sure the pi has a sufficient power source. Additionally, double check the Imager settings, ensuring that the Wifi SSID and hostname is correct.
 

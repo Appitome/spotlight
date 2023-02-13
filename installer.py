@@ -55,6 +55,9 @@ if os.path.exists('rgb-matrix.sh'):
 if os.path.exists('rpi-rgb-led-matrix'):
     shutil.rmtree('rpi-rgb-led-matrix')
 
+print('')
+print('File Management Successful')
+print('...')
 
 #Reboot once all modules are installed
 print('Rebooting System')

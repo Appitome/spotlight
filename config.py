@@ -2,6 +2,7 @@ import configparser
 import os
 import time
 import followspot as fs
+from PIL import Image
 
 
 file_path = "config.ini"
@@ -58,6 +59,7 @@ def initilize():
     
     config['USERS']['users'] = str(fs.get_users())
 
+    timeout_image()
     print("Great! Your Account Is Now Set Up!")
     time.sleep(0.5)
     print("Next Let's Set Up The Display")
@@ -142,7 +144,11 @@ def reset_settings():
             except:
                 exit()
 
-        
+def timeout_image(): # Create timeout image (blackout)
+    time_file = "timeout.jpg"
+    if not os.path.exists(time_file):
+        img = Image.new("RGB", (64, 64), (0, 0, 0))
+        img.save(time_file)
 
 def settings():
 

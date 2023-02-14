@@ -102,17 +102,26 @@ ping raspberrypi.local
 ```
 If connected, the ping will return an address. Sometimes the Pi might take longer to boot so if no responce is initally found wait a couple minutes and try again.
 
+![Ping](https://user-images.githubusercontent.com/17167742/218591878-8d0317d2-9fa8-435d-b0b5-e8811051c69f.jpg)
+
 If the ping continously fails to connect, first make sure the pi has a sufficient power source. Additionally, double check the Imager settings, ensuring that the Wifi SSID and hostname is correct.
 
 Once a ping communication has successfully completed, confirming the Pi is online, the SSH communication can be established.
 
-In the terminal:
+In the terminal ({*username*}@{*hostname*}.local):
 ```
 SSH pi@raspberrypi.local
 ```
 Select "yes" and enter the previously set password for the device.
 
-If a known host safty error occurs follow the terminal instructions to clear the ```known_hosts``` file on the computer being used
+If this is not the first time connecting a raspberry pi, a warning might appear, stating that the hostname has changed.
+
+>WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+
+If a known host safty error occurs when trying to connect a verified host, follow the terminal instructions to clear the ```known_hosts``` file on the computer being used.
+
+When the connection is successful, the terminal will enter the main directary on the raspberry pi. 
+> pi@raspberrypi:~ $
 
 ## Cloning the Git Repository
 
@@ -124,21 +133,23 @@ Once cloned we can access the spotlight folder:
 ```
 cd /home/pi/spotlight
 ```
+> pi@raspberrypi:~/spotlight $
+
 Inside this folder, all files can be viewed using the command:
 ```
 ls
 ```
-A couple of modules are required to be installed before the main program can be run. Enter the following command:
+A couple of modules are required to be installed before the main program can be run. Run the following command:
 ```
 python installer.py
 ```
- - During the setup process some questions will be asked
+ - During the setup process some questions will be periodically asked:
    - ***y*** continue, ***y*** continue, ***1*** RGB Matrix Bonnet, ***1*** Quality, ***y*** continue
- - If asked to reboot, select the '***no***' option. The program will manually reboot once finished.
+ - When asked to reboot, select the '***no***' option. The program will automatically reboot once finished.
 
-Once the terminal prompts that the Pi is rebooting, allow a couple minutes for the device to boot.
+Once the terminal prompts that the Pi is rebooting, allow a couple minutes for the device to fully boot before proceeding. Press enter to confirm the client has disconnected.
 
-To check that the Pi has successfullly rebooted, ping to confirm, reconnect using SSH, and reaccess the working directory
+To check that the Pi has successfullly rebooted, ping to confirm, then reconnect using SSH and reaccess the working directory.
 ```
 ping raspberrypi.local
 ```
@@ -155,11 +166,11 @@ python config.py
 ```
 The first time the config program is run it will automatically walk through the setup process. The owner's account should always be set up first:
 1. Enter username
-2. Enter the Cliet Id from the Spotify Developer Account Overview
-3. Enter the Cliet Secret from the Spotify Developer Account Owerview (Click 'Show Client Secret' if not visable)
-4. Enter the Localhost (Redirect) Address specified in the Spotify Developer Settings
+2. Enter the ```Cliet Id``` from the Spotify Developer Account Overview
+3. Enter the ```Cliet Secret``` from the Spotify Developer Account Owerview (Click 'Show Client Secret' if not visable)
+4. Enter the Localhost (```Redirect URI```) Address specified in the Spotify Developer Settings
 
-Once all of the correct credentials have been entered, the terminal will generate a URL. Copy this URL into an incognito web browser. You will then be prompted to log into your spotify account. If successful, the browser will generate a http localhost link in the search bar. Copy this link and paste it back into the terminal.
+Once all of the correct credentials have been entered, the terminal will generate a URL. Copy this URL into an incognito web browser. You will then be prompted to log into your spotify account. If successful, the browser will display a notification saying "This site can't be reached." I reality, the page has generated a http localhost link in the search bar. Copy the entire localhost callback link and paste it back into the terminal.
    - Incognito mode is used to prevent the browser from automatically logging into a previously known account
    - Right click to paste into terminal
 
@@ -170,4 +181,47 @@ Next, the program will ask questions to correctly initialize the display
 
 If everything is correctly configured, the program will adjust the settings and prompt the next steps.
 
+Rerun the config program at any time to change settings, add users, remove users, or reset the device.
 
+## Testing the Program
+Now it is time to see if the display is correctly configured.
+
+The program ```main.py`` orchestrates each program tasked with running an aspect of the display. 
+
+Start by playing a song on the registered Spotify account.
+
+Then run the following command to temporarily test the program:
+```
+python main.py
+```
+
+If everything is running smothly, the title of the currently playing song will be displayed in the terminal.
+The alblum cover image will appear on the device.
+To exit the program: ```ctrl+z```
+
+## Automatically Running Program On Boot
+The purpose of the display is to automatically display current alblum covers without any user intervention. Therefore, having to manually start the program every time the can be considered counterproductive.
+
+To auto start the ```main.py``` program on device boot, enter the following command into the terminal:
+```
+sudo nano /etc/rc.local
+```
+Within the ```rc.local``` file, routines can be created to automatically run on boot.
+
+On a line prier to ```exit 0```, enter the following:
+```
+python '/home/pi/spotlight/main.py' &
+```
+ - ```python```: The script that will be run depends on python
+ - ```/home/pi/spotlight/main.py```: The location of the file to run
+ - ```&```: Tells the file not to wait for the program to finish and continue with the boot process
+
+![RcLocal](https://user-images.githubusercontent.com/17167742/218591525-bfe7d51c-fa76-4102-a9d5-7040d9eed51f.jpg)
+
+Once the file is properly edited: ```ctrl+x``` + ```y``` + ```enter``` to save the changes.
+
+Finally reboot the raspberry pi:
+```
+sudo reboot
+```
+If all goes well, the display will show the currently playing song's alblum cover after startup.
